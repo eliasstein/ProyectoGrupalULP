@@ -18,7 +18,7 @@ public class MateriaData {
         con = Conexion.getConexion();
     }
     
-    public void GuardarAlumno(Materia materia){
+    public void GuardarMateria(Materia materia){
         String sql = "INSERT INTO materia (idMateria, nombre, año, estado)"+
                      "VALUES(?,?,?,?)";
         try{
@@ -31,12 +31,12 @@ public class MateriaData {
             ResultSet rs = ps.getGeneratedKeys();
             if(rs.next()){
                 materia.setIdmateria(rs.getInt("idMateria"));
-            JOptionPane.showMessageDialog(null, "Alumno añadido con exito.");
+            JOptionPane.showMessageDialog(null, "Materia añadido con exito.");
             }
             ps.close();
         }
         catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno "+ ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia "+ ex.getMessage());
         }
     }
     
@@ -57,7 +57,7 @@ public class MateriaData {
                 materia.setEstado(rs.getBoolean("estado"));
             } 
             else {
-                JOptionPane.showMessageDialog(null, "No existe el alumno");
+                JOptionPane.showMessageDialog(null, "No existe el materia");
                 ps.close();
             }
         }
@@ -98,16 +98,16 @@ public class MateriaData {
             int fila=ps.executeUpdate();
 
             if(fila==1){
-                JOptionPane.showMessageDialog(null, "Se eliminó el alumno.");
+                JOptionPane.showMessageDialog(null, "Se eliminó el materia.");
             }
             ps.close();
         } 
         catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, " Error al acceder a la tabla Alumno");
+            JOptionPane.showMessageDialog(null, " Error al acceder a la tabla Materia");
         }
     }
     
-    public List<Materia> listarAlumnos() {
+    public List<Materia> listarMaterias() {
         List<Materia> materias = new ArrayList<>();
         try {
             String sql = "SELECT * FROM materia WHERE estado = 1 ";
