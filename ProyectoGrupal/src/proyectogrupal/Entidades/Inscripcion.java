@@ -23,6 +23,10 @@ public class Inscripcion {
     public Inscripcion(double nota) {
         this.nota = nota;
     }
+    
+    public Inscripcion(){
+        
+    }
 
     public int getIdinscripcion() {
         return idinscripcion;
@@ -38,6 +42,22 @@ public class Inscripcion {
 
     public void setAlumno(Alumno alumno) {
         this.alumno = alumno;
+    }
+    
+    public int getIdAlumno(){
+        return alumno.getIdalumno();
+    }
+    
+    public void setIdAlumno(int idalumno){
+       alumno.setIdAlumno(idalumno);
+    }
+    
+    public int getIdMateria(){
+        return materia.getIdmateria();
+    }
+    
+    public void setIdMateria(int idmateria){
+       materia.setIdmateria(idmateria);
     }
 
     public Materia getMateria() {
