@@ -161,6 +161,24 @@ public class InscripcionData {
         }
     }
     
+    public void ActualizarNota(int idalumno, int idmateria, double nota){
+        String sql="UPDATE FROM inscripcion SET nota = ? "
+                + "WHERE idAlumno = ? AND idMateria = ?";
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDouble(1, nota);
+            ps.setInt(2, idalumno);
+            ps.setInt(3,idmateria);
+            int filas=ps.executeUpdate();
+            if(filas>0){
+                JOptionPane.showMessageDialog(null, "Inscripcion actualizada exitosamente");
+            }
+        }
+        catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error al obtener Inscripciones"+ex.getMessage());
+        }
+    }
+    
     public List<Alumno> obtenerAlumnosXMateria(int id){
         List<Alumno> alumnos = new ArrayList<>();
         String sql ="SELECT alumno.*,materia.nombre" +
