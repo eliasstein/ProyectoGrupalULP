@@ -256,6 +256,7 @@ public class GestionDeAlumnos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+            jTextField1.setText("");
             jTextField2.setText("");
             jTextField3.setText("");
             jRadioButton1.setSelected(false);
