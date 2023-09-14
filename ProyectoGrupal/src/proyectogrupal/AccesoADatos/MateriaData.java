@@ -92,6 +92,7 @@ public class MateriaData {
     
     public void eliminarMateria(int id) {
         try {
+            //Actualizamo el estado, pero no la borramos fisicamente!
             String sql = "UPDATE materia SET estado = 0 WHERE idMateria = ? ";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);

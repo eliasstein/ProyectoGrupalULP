@@ -4,7 +4,10 @@
  */
 package proyectogrupal.Vistas;
 
+import java.beans.PropertyVetoException;
+import java.util.List;
 import javax.swing.JOptionPane;
+import proyectogrupal.AccesoADatos.AlumnoData;
 import proyectogrupal.AccesoADatos.MateriaData;
 import proyectogrupal.Entidades.Materia;
 
@@ -63,12 +66,32 @@ public class GestionDeMateria extends javax.swing.JInternalFrame {
         jLabel5.setText("Estado:");
 
         jButton2.setText("Salir");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Eliminar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Nuevo");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Guardar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -145,27 +168,100 @@ public class GestionDeMateria extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         if(!jTextField1.getText().isEmpty())
-        {
+        if (!jTextField1.getText().isEmpty()) {
             MateriaData materia = new MateriaData();
-            try{
-            Materia mate = materia.buscarMateria(Integer.parseInt(jTextField1.getText()));
-            jTextField2.setText(mate.getNombre());
-            jTextField3.setText(mate.getAniomateria()+"");      
-            jRadioButton1.setSelected(mate.isEstado());
+            try {
+                Materia mate = materia.buscarMateria(Integer.parseInt(jTextField1.getText()));
+                jTextField2.setText(mate.getNombre());
+                jTextField3.setText(mate.getAniomateria() + "");
+                jRadioButton1.setSelected(mate.isEstado());
 
-            }
-            catch(NumberFormatException ex){
-                JOptionPane.showMessageDialog(this,"Se ha ingresado un valor que no es de tipo numerico como Codigo!");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Se ha ingresado un valor que no es de tipo numerico como Codigo!");
                 return;
+            } catch (NullPointerException ex) {
+                JOptionPane.showMessageDialog(this, "el Código del materia " + jTextField1.getText() + " no se encuentra en la BD");
             }
-            catch(NullPointerException ex){
-                JOptionPane.showMessageDialog(this, "el Código del materia "+jTextField1.getText()+" no se encuentra en la BD");
-            }
-            
-            
+
         }// TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jRadioButton1.setSelected(false);
+        jTextField3.setText("");
+
+
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+        MateriaData materia = new MateriaData();
+
+        try {
+            String id = JOptionPane.showInputDialog("Eliminar por 'id', ingrese el id de la materia:");
+
+            if (id != null) {
+                // conviento la cadena 'id' a un entero
+                int idEntero = Integer.parseInt(id);
+
+                // llamo a la función eliminarMateria con el valor entero
+                materia.eliminarMateria(idEntero);
+            }
+        } catch (NumberFormatException ex) {
+            // Maneja la excepción si se ingresó un valor no numérico
+            JOptionPane.showMessageDialog(this, "Se ha ingresado un valor que no es de tipo numérico como ID");
+            return; //vuelvo si comete el error
+        }
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        //IMPORTANTE PARA QUE ANDE BIEN NO TIENE QUE SER AUTOINCREMENTAL EL ID DE MATERIA!
+                //VER ESO!
+        MateriaData materiaData = new MateriaData();
+        //arme variables porque me generaba lio sino tan largo el codigo
+        int idMateria = Integer.parseInt(jTextField1.getText());
+        String nombreMateria = jTextField2.getText();
+        int anioMateria = Integer.parseInt(jTextField3.getText());
+        boolean estadoMateria = jRadioButton1.isSelected();
+
+        // me traigo la lista de las materias existentes
+        List<Materia> materiasExistentes = materiaData.listarMaterias();
+
+        // Buscar si la materia ya existe en la lista
+        Materia materiaExistente = null;
+        for (Materia materia : materiasExistentes) {
+            if (materia.getIdmateria() == idMateria) {
+                materiaExistente = materia;
+                break;
+            }
+        }
+
+        if (materiaExistente != null) {
+            // La materia ya existe, modificarla
+            materiaExistente.setNombre(nombreMateria);
+            materiaExistente.setAniomateria(anioMateria);
+            materiaExistente.setEstado(estadoMateria);
+            //llamo a la funcion modificar materia
+            materiaData.modificarMateria(materiaExistente); 
+            
+        } else {
+            // La materia no existe, guardarla
+            Materia nuevaMateria = new Materia(idMateria, nombreMateria, anioMateria, estadoMateria);
+           //llamo a la funcion guardar materia
+            materiaData.GuardarMateria(nuevaMateria); //no me muesta el cartel que la cargo pero la carga
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+         try {
+            this.setClosed(true);
+        } catch (PropertyVetoException ex) {
+            System.err.println("Closing Exception");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
