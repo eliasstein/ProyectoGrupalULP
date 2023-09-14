@@ -116,7 +116,14 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
+              //Añadir JInternalFrame Materia       
+        GestionDeMateria wind = new GestionDeMateria();
+        int centerX=(this.getWidth()/2)-(wind.getWidth()/2);
+        int centerY=(this.getHeight()/2)-(wind.getHeight()/2);
+        wind.setBounds(centerX,centerY,wind.getWidth(), wind.getHeight());
+        wind.setVisible(true);
+        jDesktopPane1.add(wind);
+        jDesktopPane1.moveToFront(wind);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
