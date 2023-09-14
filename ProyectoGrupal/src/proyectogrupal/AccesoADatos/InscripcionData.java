@@ -96,9 +96,9 @@ public class InscripcionData {
     public List<Materia> obtenerMateriasCursadas(int id){
         List<Materia> materias = new ArrayList<>();
         try{
-            String sql = "SELECT inscripcion,idMateria, nombre, año"
-                       + "FROM inscripción "
-                       + "JOIN materia ON(inscripción.idMateria=materia.idMateria)"
+            String sql = "SELECT *"
+                       + "FROM inscripcion "
+                       + "JOIN materia ON(inscripcion.idMateria=materia.idMateria)"
                        + "WHERE inscripcion.idAlumno = ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
@@ -122,9 +122,9 @@ public class InscripcionData {
     public List<Materia> obtenerMateriasNOCursadas(int id){
         List<Materia> materias = new ArrayList<>();
         try{
-            String sql = "SELECT inscripcion, idMateria, nombre, año"
-                       + "FROM inscripción "
-                       + "JOIN materia ON(inscripción.idMateria=materia.idMateria)"
+            String sql = "SELECT *"
+                       + "FROM inscripcion "
+                       + "JOIN materia ON(inscripcion.idMateria=materia.idMateria)"
                        + "WHERE inscripcion.idAlumno <> ?";
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);

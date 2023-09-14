@@ -82,6 +82,11 @@ public class Main extends javax.swing.JFrame {
         jMenu3.setText("Administracion");
 
         jMenuItem3.setText("Manejo de Inscripciones");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem3);
 
         jMenuItem4.setText("Manipulacion de notas");
@@ -139,6 +144,19 @@ public class Main extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+              
+        FormularioDeInscripcion wind = new FormularioDeInscripcion();
+        int centerX=(this.getWidth()/2)-(wind.getWidth()/2);
+        int centerY=(this.getHeight()/2)-(wind.getHeight()/2);
+        wind.setBounds(centerX,centerY,wind.getWidth(), wind.getHeight());
+        wind.setVisible(true);
+        jDesktopPane1.add(wind);
+        jDesktopPane1.moveToFront(wind);
+        
+        
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
