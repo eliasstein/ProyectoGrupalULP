@@ -17,28 +17,32 @@ public class AlumnoData {
     public AlumnoData(){
         con = Conexion.getConexion();
     }
-    public void GuardarAlumno(Alumno alumno){
-        String sql = "INSERT INTO alumno (dni, apellido, nombre, fechaNacimiento, estado)"+
-                     "VALUES(?,?,?,?,?)";
-        try{
-            PreparedStatement ps = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, alumno.getDni());
-            ps.setString(2, alumno.getApellido());
-            ps.setString(3, alumno.getNombre());
-            ps.setDate(4, Date.valueOf(alumno.getFechaNac()));
-            ps.setBoolean(5, alumno.isEstado());
-            ps.executeUpdate();
-            ResultSet rs = ps.getGeneratedKeys();
-            if(rs.next()){
-                alumno.setIdAlumno(rs.getInt("idAlumno"));
-            JOptionPane.showMessageDialog(null, "Alumno añadido con exito.");
+
+    public void GuardarAlumno(Alumno alumno) {
+    String sql = "INSERT INTO alumno (dni, apellido, nombre, fechaNacimiento, estado) " +
+                 "VALUES (?, ?, ?, ?, ?)";
+    try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        ps.setInt(1, alumno.getDni());
+        ps.setString(2, alumno.getApellido());
+        ps.setString(3, alumno.getNombre());
+        ps.setDate(4, Date.valueOf(alumno.getFechaNac()));
+        ps.setBoolean(5, alumno.isEstado());
+        
+        int filasAfectadas = ps.executeUpdate();
+        System.out.println(filasAfectadas);
+        if (filasAfectadas > 0) {
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    alumno.setIdAlumno(rs.getInt(1));//("idAlumno"); // Obtén el valor del ID generado
+                    JOptionPane.showMessageDialog(null, "Alumno añadido con éxito.");
+                }
             }
-            ps.close();
         }
-        catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno "+ ex.getMessage());
-        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno: " + ex.getMessage());
     }
+}
+
     public Alumno buscarAlumno(int id){
         Alumno alumno = null;
         String sql ="SELECT dni, apellido, nombre, fechaNacimiento FROM alumno WHERE idAlumno = ? AND estado = 1";
