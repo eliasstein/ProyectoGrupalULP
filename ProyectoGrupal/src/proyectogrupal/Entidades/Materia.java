@@ -60,7 +60,6 @@ public class Materia {
     public String toString() {
         return "Materia{" + "idmateria=" + idmateria + ", nombre=" + nombre + ", aniomateria=" + aniomateria + ", estado=" + estado + '}';
     }
-    
-    
-    
+
+     
 }
