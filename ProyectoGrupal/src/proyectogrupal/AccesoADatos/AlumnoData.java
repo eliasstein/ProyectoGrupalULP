@@ -139,7 +139,7 @@ public class AlumnoData {
             ps.setInt(5, alumno.getIdalumno());
             int exito = ps.executeUpdate();
             if (exito == 1) {
-                JOptionPane.showMessageDialog(null, "Modificado Exitosamente.");
+                JOptionPane.showMessageDialog(null, "El Alumno fue Modificado Exitosamente.");
             } 
             else {
                 JOptionPane.showMessageDialog(null, "El alumno no existe");
