@@ -162,7 +162,13 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        
+        FormularioDeNotas wind = new FormularioDeNotas();
+        int centerX = (this.getWidth() / 2) - (wind.getWidth() / 2);
+        int centerY = (this.getHeight() / 2) - (wind.getHeight() / 2);
+        wind.setBounds(centerX, centerY, wind.getWidth(), wind.getHeight());
+        wind.setVisible(true);
+        jDesktopPane1.add(wind);
+        jDesktopPane1.moveToFront(wind);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
