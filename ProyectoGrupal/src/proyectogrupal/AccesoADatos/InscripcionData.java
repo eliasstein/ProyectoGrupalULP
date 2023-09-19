@@ -206,18 +206,18 @@ public class InscripcionData {
 
     public List<Alumno> obtenerAlumnosXMateria(int id) {
         List<Alumno> alumnos = new ArrayList<>();
-        String sql = "SELECT alumno.*,materia.nombre"
-                + "FROM alumno"
-                + "INNER JOIN inscripcion on alumno.idAlumno = inscripcion.idAlumno"
-                + "INNER JOIN materia on materia.idMateria = inscripcion.idMateria"
-                + "WHERE materia.idMateria=?;";
+        String sql = "SELECT alumno.*,materia.nombre "
+                + "FROM alumno "
+                + "INNER JOIN inscripcion on alumno.idAlumno = inscripcion.idAlumno "
+                + "INNER JOIN materia on materia.idMateria = inscripcion.idMateria "
+                + "WHERE materia.idMateria=?; ";
         PreparedStatement ps = null;
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 Alumno alumno = new Alumno();
                 alumno.setIdAlumno(rs.getInt("idAlumno"));
                 alumno.setDni(rs.getInt("dni"));
@@ -225,10 +225,10 @@ public class InscripcionData {
                 alumno.setNombre(rs.getString("nombre"));
                 alumno.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
                 alumno.setEstado(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "No existe un alumno con esta materia");
-                ps.close();
+                alumnos.add(alumno);
             }
+                ps.close();
+            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla inscripcion" + ex.getMessage());
         }
