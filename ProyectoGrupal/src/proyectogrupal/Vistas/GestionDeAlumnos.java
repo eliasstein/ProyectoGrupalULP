@@ -229,7 +229,7 @@ public class GestionDeAlumnos extends javax.swing.JInternalFrame {
         AlumnoData alumdat = new AlumnoData();
         try {
             //alumdat.eliminarAlumno(Integer.parseInt(jTextField1.getText()));                  //Eliminar por DNI
-            String id = JOptionPane.showInputDialog("Eliminar por id ingrese el id del alumno");
+            String id = JOptionPane.showInputDialog("Eliminar por 'id', Ingrese el id del alumno:");
             if (id != null) {
                 alumdat.eliminarAlumnoPorID(Integer.parseInt(id));
             }

@@ -219,6 +219,9 @@ public class FormularioDeInscripcion extends javax.swing.JInternalFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         limpiarTabla();
+        //no permito usar los botones al comienzo
+        jButton1.setEnabled(false);
+        jButton2.setEnabled(false);
         if (jRadioButton1.isSelected()) {
             limpiarTabla();
             jRadioButton2.setSelected(false);
@@ -277,16 +280,8 @@ public class FormularioDeInscripcion extends javax.swing.JInternalFrame {
 
         // Actualiza la JTable para que me muestre los nuevas materias borrando la que ya me inscribí
         //es el mismo codigo q usamos arriba en los botones de Inscripto o no Inscripto
-        limpiarTabla();
-        jRadioButton1.setSelected(false);
-        InscripcionData inscridataData = new InscripcionData();
-        Alumno alumnoSeleccionados = (Alumno) jComboBox1.getSelectedItem();
-        for (Materia m : inscridataData.obtenerMateriasNOCursadas(alumnoSeleccionados.getIdalumno())) {
-            tabla.addRow(new Object[]{
-                m.getIdmateria(),
-                m.getAniomateria(),
-                m.getNombre()});
-        }
+        refreshTable();
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -308,16 +303,7 @@ public class FormularioDeInscripcion extends javax.swing.JInternalFrame {
             inscridata.borrarInscripcionMateriaAlumno(alumnoseleccionado.getIdalumno(), idMateria);
         }
         //ESTO ES PARA REFRESCAR LA TABLA, NO SE SI HAY OTRA FORMA DE HACER.
-        limpiarTabla();
-        jRadioButton2.setSelected(false);
-        InscripcionData inscriData = new InscripcionData();
-        Alumno alumnoSeleccionados = (Alumno) jComboBox1.getSelectedItem();
-        for (Materia m : inscriData.obtenerMateriasCursadas(alumnoSeleccionados.getIdalumno())) {
-            tabla.addRow(new Object[]{
-                m.getIdmateria(),
-                m.getAniomateria(),
-                m.getNombre()});
-        }
+        refreshTable();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -361,6 +347,21 @@ public class FormularioDeInscripcion extends javax.swing.JInternalFrame {
         AlumnoData aludata = new AlumnoData();
         for (Alumno a : aludata.listarAlumnos()) {
             jComboBox1.addItem(a);
+        }
+    }
+
+    private void refreshTable() {
+        // Actualiza la JTable para que me muestre los nuevas materias borrando la que ya me inscribí
+        //es el mismo codigo q usamos arriba en los botones de Inscripto o no Inscripto
+        limpiarTabla();
+        jRadioButton1.setSelected(false);
+        InscripcionData inscridataData = new InscripcionData();
+        Alumno alumnoSeleccionados = (Alumno) jComboBox1.getSelectedItem();
+        for (Materia m : inscridataData.obtenerMateriasNOCursadas(alumnoSeleccionados.getIdalumno())) {
+            tabla.addRow(new Object[]{
+                m.getIdmateria(),
+                m.getAniomateria(),
+                m.getNombre()});
         }
     }
 
