@@ -5,20 +5,23 @@
 package proyectogrupal.Vistas;
 
 import java.beans.PropertyVetoException;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import proyectogrupal.AccesoADatos.AlumnoData;
 import proyectogrupal.AccesoADatos.InscripcionData;
 import proyectogrupal.Entidades.Alumno;
 import proyectogrupal.Entidades.Inscripcion;
-import proyectogrupal.Entidades.Materia;
+
 
 /**
  *
  * @author Cristian Rodriguez
  */
 public class FormularioDeNotas extends javax.swing.JInternalFrame {
-    
+
     private DefaultTableModel tabla = new DefaultTableModel();
+
     /**
      * Creates new form FormularioDeNotas
      */
@@ -68,6 +71,11 @@ public class FormularioDeNotas extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Guardar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Salir");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -124,24 +132,83 @@ public class FormularioDeNotas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // Limpia la tabla antes de agregar nuevas filas
         limpiarTabla();
-        InscripcionData inscridata = new InscripcionData();
-        Alumno alumnoseleccionado = (Alumno) jComboBox1.getSelectedItem();
-        for (Inscripcion ins : inscridata.obtenerInscripcionesPorAlumno(alumnoseleccionado.getIdalumno())) {
-                tabla.addRow(new Object[]{
-                    ins.getIdMateria(),
-                    ins.getMateria(),
-                    ins.getNota()});
-            }
+
+        // Obtiene el alumno seleccionado del JComboBox
+        Alumno alumnoSeleccionado = (Alumno) jComboBox1.getSelectedItem();
+
+        // Verifica si se ha seleccionado un alumno
+        // Obtiene las inscripciones del alumno seleccionado
+        InscripcionData inscripcionData = new InscripcionData();
+        List<Inscripcion> inscripciones = inscripcionData.obtenerInscripcionesPorAlumno(alumnoSeleccionado.getIdalumno());
+
+        // Agrega las inscripciones a la tabla
+        for (Inscripcion inscripcion : inscripciones) {
+            tabla.addRow(new Object[]{
+                inscripcion.getIdMateria(),
+                inscripcion.getMateria().getNombre(), // Obtén el nombre de la materia
+                inscripcion.getNota()
+            });
+        }
+
+
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-           try {
+        try {
             this.setClosed(true);
         } catch (PropertyVetoException ex) {
             System.err.println("Closing Exception");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+            try {
+        // Obtén el alumno seleccionado del JComboBox
+        Alumno alumnoSeleccionado = (Alumno) jComboBox1.getSelectedItem();
+
+        // Verifica si se ha seleccionado un alumno
+        if (alumnoSeleccionado != null) {
+            int idAlumno = alumnoSeleccionado.getIdalumno();
+            // Obtén la fila seleccionada del jTable1
+            int filaSeleccionada = jTable1.getSelectedRow();
+            
+            if (filaSeleccionada != -1) {
+                // Obtén el ID de la materia desde la fila seleccionada del jTable1
+                int idMateria = (int) jTable1.getValueAt(filaSeleccionada, 0);
+
+                // Solicita la nueva nota al usuario
+                String nuevaNotaStr = JOptionPane.showInputDialog("Ingrese la nota de la materia " + jTable1.getValueAt(filaSeleccionada, 1) + ":");
+
+                if (nuevaNotaStr != null) {
+                    double nuevaNota = Double.parseDouble(nuevaNotaStr);
+
+                    // Validar que la nota sea mayor o igual a 1
+                    if (nuevaNota >= 1) {
+                        // Llama a la función para actualizar la nota
+                        InscripcionData insAlumno = new InscripcionData();
+                        insAlumno.ActualizarNota(idAlumno, idMateria, nuevaNota);
+
+                        // Muestra un mensaje de éxito y refresca la tabla
+                        JOptionPane.showMessageDialog(this, "Materia actualizada.");
+                        
+                        refreshTable();
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "La nota ingresada es inválida. Debe ser mayor o igual a 1.");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, seleccione una materia de la tabla.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, seleccione un alumno del combo.");
+        }
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Se ha ingresado una nota no válida.");
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -154,7 +221,6 @@ public class FormularioDeNotas extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
-    
     private void limpiarTabla() {
         int f = jTable1.getRowCount() - 1;
         for (int x = f; x >= 0; x--) {
@@ -175,5 +241,32 @@ public class FormularioDeNotas extends javax.swing.JInternalFrame {
             jComboBox1.addItem(a);
         }
     }
+    private void refreshTable() {
+    // Supongamos que tienes una instancia de DefaultTableModel llamada 'tablaModel' asociada a tu jTable1
+    DefaultTableModel tablaModel = (DefaultTableModel) jTable1.getModel();
+    
+    // Limpia todas las filas existentes en la tabla
+    tablaModel.setRowCount(0);
+
+    // Limpia la tabla antes de agregar nuevas filas
+        limpiarTabla();
+
+        // Obtiene el alumno seleccionado del JComboBox
+        Alumno alumnoSeleccionado = (Alumno) jComboBox1.getSelectedItem();
+
+        // Verifica si se ha seleccionado un alumno
+        // Obtiene las inscripciones del alumno seleccionado
+        InscripcionData inscripcionData = new InscripcionData();
+        List<Inscripcion> inscripciones = inscripcionData.obtenerInscripcionesPorAlumno(alumnoSeleccionado.getIdalumno());
+
+        // Agrega las inscripciones a la tabla
+        for (Inscripcion inscripcion : inscripciones) {
+            tabla.addRow(new Object[]{
+                inscripcion.getIdMateria(),
+                inscripcion.getMateria().getNombre(), // Obtén el nombre de la materia
+                inscripcion.getNota()
+            });
+        }
+}
 
 }

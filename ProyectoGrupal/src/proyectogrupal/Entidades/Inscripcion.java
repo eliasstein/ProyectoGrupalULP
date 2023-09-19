@@ -44,20 +44,34 @@ public class Inscripcion {
         this.alumno = alumno;
     }
     
+    // Podes elegir un valor predeterminado si el alumno es nulo sino daba error
     public int getIdAlumno(){
-        return alumno.getIdalumno();
+        if (alumno != null) {
+            return alumno.getIdalumno();
+        }
+        return 0; 
     }
-    
+    // Crea un nuevo objeto Alumno si es nulo sino da error NullPointerException
     public void setIdAlumno(int idalumno){
-       alumno.setIdAlumno(idalumno);
+        if (alumno == null) {
+            alumno = new Alumno(); 
+        }
+        alumno.setIdAlumno(idalumno);
     }
     
+    // Podes elegir un valor predeterminado si la materia es nula
     public int getIdMateria(){
-        return materia.getIdmateria();
+        if (materia != null) {
+            return materia.getIdmateria();
+        }
+        return 0; 
     }
-    
+    //Crea un nuevo objeto Materia si es nula
     public void setIdMateria(int idmateria){
-       materia.setIdmateria(idmateria);
+        if (materia == null) {
+            materia = new Materia(); 
+        }
+        materia.setIdmateria(idmateria);
     }
 
     public Materia getMateria() {
@@ -75,8 +89,4 @@ public class Inscripcion {
     public void setNota(double nota) {
         this.nota = nota;
     }
-    
-    
-    
-    
 }

@@ -71,8 +71,13 @@ public class InscripcionData {
     }
 
     public List<Inscripcion> obtenerInscripcionesPorAlumno(int id) {
-        List<Inscripcion> inscripciones = new ArrayList<>();
-    String sql ="SELECT * FROM inscripcion WHERE idAlumno = ?";
+        
+    List<Inscripcion> inscripciones = new ArrayList<>();
+    String sql = "SELECT inscripcion.idInscripto, inscripcion.nota, inscripcion.idAlumno, inscripcion.idMateria, materia.nombre " +
+                 "FROM inscripcion " +
+                 "INNER JOIN materia ON inscripcion.idMateria = materia.idmateria " +
+                 "WHERE inscripcion.idAlumno = ?";
+    
     PreparedStatement ps = null;
     ResultSet rs = null;
     
@@ -83,35 +88,27 @@ public class InscripcionData {
 
         while (rs.next()) {
             Inscripcion inscripcion = new Inscripcion();
-            inscripcion.setIdinscripcion(rs.getInt("idinscripcion"));
+            inscripcion.setIdinscripcion(rs.getInt("idInscripto"));
             inscripcion.setNota(rs.getDouble("nota"));
             inscripcion.setIdAlumno(id);
             inscripcion.setIdMateria(rs.getInt("idMateria"));
+            
+            // Obtén el nombre de la materia desde la columna "nombre"
+            String nombreMateria = rs.getString("nombre");
+            
+            // Configura el nombre de la materia en la inscripción
+            inscripcion.getMateria().setNombre(nombreMateria);
+            
             inscripciones.add(inscripcion);
         }
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(null, "Error al acceder a la tabla inscripcion: " + ex.getMessage());
         System.out.println(ex);
     } finally {
-        if (ps != null) {
-            try {
-                ps.close();
-            } catch (SQLException e) {
-                // Manejo de errores al cerrar PreparedStatement
-            }
-        }
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (SQLException e) {
-                // Manejo de errores al cerrar ResultSet
-            }
-        }
-        // Cierra la conexión aquí si no estás utilizando un pool de conexiones
+        // Cierre de PreparedStatement y ResultSet
     }
     
     return inscripciones;
-        
     }
 
     public List<Materia> obtenerMateriasCursadas(int id) {
@@ -190,8 +187,9 @@ public class InscripcionData {
     }
 
     public void ActualizarNota(int idalumno, int idmateria, double nota) {
-        String sql = "UPDATE FROM inscripcion SET nota = ? "
-                + "WHERE idAlumno = ? AND idMateria = ?";
+        // Corregí la consulta SQL para actualizar la nota en la tabla 'inscripcion'
+        String sql = "UPDATE inscripcion SET nota = ? WHERE idAlumno = ? AND idMateria = ?";
+
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setDouble(1, nota);
